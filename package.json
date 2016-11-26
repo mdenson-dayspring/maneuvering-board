@@ -22,14 +22,16 @@
     "@angular/platform-browser": "~2.1.1",
     "@angular/platform-browser-dynamic": "~2.1.1",
     "@angular/router": "~3.1.1",
+    "angular2-logger": "^0.5.0",
     "core-js": "^2.4.1",
+    "element-resize-detector": "^1.1.9",
     "rxjs": "5.0.0-beta.12",
     "zone.js": "^0.6.25"
   },
   "devDependencies": {
     "@types/core-js": "^0.9.34",
-    "@types/node": "^6.0.45",
     "@types/jasmine": "^2.5.35",
+    "@types/node": "^6.0.45",
     "angular2-template-loader": "^0.4.0",
     "awesome-typescript-loader": "^2.2.4",
     "bootstrap-sass": "^3.3.7",
