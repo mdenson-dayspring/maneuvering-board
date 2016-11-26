@@ -75,8 +75,8 @@ export class GraphicalBoardDirective implements AfterViewInit {
 			let size:number = Math.min(this.canvas.height, this.canvas.width);
 
 			let ctr:number = size / 2;
-			let unit:number = size / 20;
-			let tenth:number = size / 200;
+			let unit:number = (size - 22) / 20;
+			let tenth:number = (size - 22) / 200;
 
 			let ctx = this.canvas.getContext('2d');
 
@@ -110,14 +110,13 @@ export class GraphicalBoardDirective implements AfterViewInit {
 			let size:number = Math.min(this.canvas.height, this.canvas.width);
 
 			let ctr:number = size / 2;
-			let unit:number = size / 20;
-			let tenth:number = size / 200;
+			let unit:number = (size - 22) / 20;
+			let tenth:number = (size - 22) / 200;
 
 			let ctx = this.canvas.getContext('2d');
 
 			ctx.strokeStyle = '#59714f';
 			ctx.fillStyle = '#59714f';
-      ctx.font = '7pt Arial';
 
 			ctx.lineWidth = 1;
 
@@ -149,25 +148,29 @@ export class GraphicalBoardDirective implements AfterViewInit {
       // bearing labels
 			ctx.translate(ctr, ctr);
 			for (let d=0; d<360; d=d + 10) {
-        var metrics = ctx.measureText(d); 
-        ctx.fillText(d, -metrics.width/2, -9.7*unit);
+        // Bearing labels
+        ctx.font = '9pt Arial';
+        let metrics = ctx.measureText(d); 
+        ctx.fillText(d, -metrics.width/2, -10*unit-2);
+        // Reciprocal bearing labels
+        ctx.font = '6pt Arial';
+        let recip = d>=180 ? d - 180 : 360 + (d - 180);
+        metrics = ctx.measureText(recip); 
+        ctx.fillText(recip, -metrics.width/2, -10*unit+8);
+
 				ctx.rotate(10 * Math.PI / 180);
 			}
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-      // outside circle (10 mile)
+      // borders
 			ctx.lineWidth = 1;
 			ctx.translate(ctr, ctr);
 			ctx.beginPath();
-			ctx.arc(0, 0, 10 * unit, 0, Math.PI * 2, true);
+      let tenmmiles = 10 * unit;
+      // outside circle (10 mile)
+			ctx.arc(0, 0, tenmmiles, 0, Math.PI * 2, true);
 			ctx.stroke();
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-      // outside rectangle
-			ctx.lineWidth = 1;
-			ctx.beginPath();
-			ctx.rect(1,1,size-2, size-2);
-			ctx.stroke();
 		}
 	}
 }
