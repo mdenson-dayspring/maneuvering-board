@@ -8,9 +8,9 @@ import { Contact } from '../model/contact.model';
 
 @Injectable()
 export class ContactListService {
-    contactList: Observable<Contact[]>
+    contactList: Observable<Contact[]>;
     private _contactList: BehaviorSubject<Contact[]>;
-    dataStore: {
+    private dataStore: {
         contactList: Contact[]
     };
 

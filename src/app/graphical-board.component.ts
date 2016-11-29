@@ -23,11 +23,11 @@ export class GraphicalBoardDirective implements AfterViewInit {
   @ViewChild('container') containerRef: ElementRef;
   @ViewChild('board') canvasRef: ElementRef;
   @Input() size: number;
+  contactList$: Observable<Contact[]>;
 
   private listenFunc: Function;
   private canvas: any;
   private contactList: Contact[];
-  contactList$: Observable<Contact[]>;
 
   constructor(private $contactList: ContactListService, private $log: Logger) { }
 
@@ -37,7 +37,7 @@ export class GraphicalBoardDirective implements AfterViewInit {
 
     this.contactList$.subscribe(updatedContacts => {
       this.contactList = updatedContacts;
-      
+
       if (this.canvas) {
         this.contactList.forEach((c) => this.drawContact(c));
       }
@@ -47,7 +47,7 @@ export class GraphicalBoardDirective implements AfterViewInit {
   ngAfterViewInit() {
     this.canvas = this.canvasRef.nativeElement;
     let erd = elementResizeDetectorMaker({
-      strategy: "scroll"
+      strategy: 'scroll'
     });
     erd.listenTo(this.containerRef.nativeElement, (element: any) => {
       let size: number = element.offsetWidth;
@@ -86,7 +86,7 @@ export class GraphicalBoardDirective implements AfterViewInit {
 
       ctx.rotate(-m.brg * Math.PI / 180);
       ctx.font = '6pt Arial';
-      var metrics = ctx.measureText(m.label);
+      let metrics = ctx.measureText(m.label);
       ctx.fillText(m.label, -metrics.width, -4);
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);

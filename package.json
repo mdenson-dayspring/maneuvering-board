@@ -5,6 +5,7 @@
   "scripts": {
     "start": "webpack-dev-server --inline --progress --port 3000",
     "test": "karma start",
+    "lint": "tslint 'src/**/*.ts'",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail"
   },
   "licenses": [
@@ -53,6 +54,7 @@
     "rimraf": "^2.5.2",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
+    "tslint": "^4.0.2",
     "typescript": "^2.0.3",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1",

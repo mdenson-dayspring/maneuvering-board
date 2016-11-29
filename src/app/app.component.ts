@@ -6,7 +6,7 @@ import '../sass/styles.scss';
   template: require('./app.component.html'),
   styles: [require('./app.component.scss')]
 })
-export class AppComponent { 
+export class AppComponent {
 
   constructor() {
   }
