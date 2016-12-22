@@ -1,4 +1,6 @@
 var webpack = require('webpack');
+
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
@@ -63,6 +65,17 @@ module.exports = {
   },
 
   plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: helpers.root('node_modules', 'element-resize-detector/dist/element-resize-detector.min.js'),
+        to: 'assets/js'
+      },
+          {
+        from: helpers.root('public', 'images'),
+        to: 'assets/img'
+      }
+    ]),
+
     new webpack.optimize.CommonsChunkPlugin({
       name: ['app', 'vendor', 'polyfills']
     }),
