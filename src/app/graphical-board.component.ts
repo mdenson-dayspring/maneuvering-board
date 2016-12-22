@@ -10,7 +10,7 @@ import {
 import { Logger } from 'angular2-logger/core';
 import { Observable } from 'rxjs/observable';
 
-import { Contact } from './model/contact.model';
+import { Contact, UIPoint } from './model/contact.model';
 import { ContactListService } from './services/contact-list.service';
 
 declare var elementResizeDetectorMaker: Function;
@@ -24,6 +24,11 @@ export class GraphicalBoardDirective implements AfterViewInit {
   @ViewChild('board') canvasRef: ElementRef;
   @Input() size: number;
   contactList$: Observable<Contact[]>;
+
+  private uisize: number;
+  private ctr: number;
+  private unit: number;
+  private tenth: number;
 
   private listenFunc: Function;
   private canvas: any;
@@ -54,54 +59,55 @@ export class GraphicalBoardDirective implements AfterViewInit {
       this.canvas.width = +size;
       this.canvas.height = +size;
 
+      this.rescale();
+
       this.drawGrid();
       this.contactList.forEach((c) => this.drawContact(c));
     });
   }
 
-  private drawContact(m: Contact) {
+  private rescale() {
+      this.uisize = Math.min(this.canvas.height, this.canvas.width);
+      this.ctr = this.uisize / 2;
+      this.unit = (this.uisize - 22) / 20;
+      this.tenth = (this.uisize - 22) / 200;
+  }
+  private drawPoint(pt: UIPoint) {
     if (this.canvas.getContext) {
-      let size: number = Math.min(this.canvas.height, this.canvas.width);
-
-      let ctr: number = size / 2;
-      let unit: number = (size - 22) / 20;
-      let tenth: number = (size - 22) / 200;
-
       let ctx = this.canvas.getContext('2d');
-
       ctx.strokeStyle = 'black';
       ctx.fillStyle = 'black';
       ctx.lineWidth = 1;
 
-      ctx.translate(ctr, ctr);
-      ctx.rotate(m.brg * Math.PI / 180);
-      ctx.translate(0, -unit * m.rng);
+      ctx.translate(this.ctr, this.ctr);
+
+      ctx.lineWidth = 1;
 
       ctx.beginPath();
+      ctx.moveTo(pt.x * this.unit, (-pt.y * this.unit) - 1);
+      ctx.lineTo(pt.x * this.unit, (-pt.y * this.unit) + 1);
+      ctx.stroke();
 
-      ctx.moveTo(-tenth, 0);
-      ctx.lineTo(+tenth, 0);
-      ctx.moveTo(0, -tenth);
-      ctx.lineTo(0, +tenth);
+      ctx.beginPath();
+      ctx.arc(pt.x * this.unit, (-pt.y * this.unit), this.tenth, 0, Math.PI * 2, true);
 
-      ctx.rotate(-m.brg * Math.PI / 180);
       ctx.font = '6pt Arial';
-      let metrics = ctx.measureText(m.label);
-      ctx.fillText(m.label, -metrics.width, -4);
+      let metrics = ctx.measureText(pt.label);
+      ctx.fillText(pt.label,
+        (pt.x * this.unit) - metrics.width - this.tenth,
+        (-pt.y * this.unit) - this.tenth);
+      ctx.stroke();
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.stroke();
     }
+  }
+
+  private drawContact(m: Contact) {
+    this.drawPoint(m.toUiPoint());
   }
 
   private drawGrid() {
     if (this.canvas.getContext) {
-      let size: number = Math.min(this.canvas.height, this.canvas.width);
-
-      let ctr: number = size / 2;
-      let unit: number = (size - 22) / 20;
-      let tenth: number = (size - 22) / 200;
-
       let ctx = this.canvas.getContext('2d');
 
       ctx.strokeStyle = '#59714f';
@@ -109,14 +115,14 @@ export class GraphicalBoardDirective implements AfterViewInit {
 
       ctx.lineWidth = 1;
 
-      ctx.translate(ctr, ctr);
+      ctx.translate(this.ctr, this.ctr);
 
       // center hash mark
       ctx.beginPath();
-      ctx.moveTo(0 - (2 * tenth), 0);
-      ctx.lineTo(0 + (2 * tenth), 0);
-      ctx.moveTo(0, 0 - (2 * tenth));
-      ctx.lineTo(0, 0 + (2 * tenth));
+      ctx.moveTo(0 - (2 * this.tenth), 0);
+      ctx.lineTo(0 + (2 * this.tenth), 0);
+      ctx.moveTo(0, 0 - (2 * this.tenth));
+      ctx.lineTo(0, 0 + (2 * this.tenth));
       ctx.stroke();
 
       // 1 - 9 mile dotted rings
@@ -126,8 +132,8 @@ export class GraphicalBoardDirective implements AfterViewInit {
         ctx.rotate(10 * Math.PI / 180);
 
         for (let i = 1; i < 15; i++) {
-          ctx.moveTo(0, (i * -unit) - 1);
-          ctx.lineTo(0, (i * -unit) + 1);
+          ctx.moveTo(0, (i * -this.unit) - 1);
+          ctx.lineTo(0, (i * -this.unit) + 1);
         }
 
       }
@@ -135,17 +141,17 @@ export class GraphicalBoardDirective implements AfterViewInit {
       ctx.stroke();
 
       // bearing labels
-      ctx.translate(ctr, ctr);
+      ctx.translate(this.ctr, this.ctr);
       for (let d = 0; d < 360; d = d + 10) {
         // Bearing labels
         ctx.font = '9pt Arial';
         let metrics = ctx.measureText(d);
-        ctx.fillText(d, -metrics.width / 2, -10 * unit - 2);
+        ctx.fillText(d, -metrics.width / 2, -10 * this.unit - 2);
         // Reciprocal bearing labels
         ctx.font = '6pt Arial';
         let recip = d >= 180 ? d - 180 : 360 + (d - 180);
         metrics = ctx.measureText(recip);
-        ctx.fillText(recip, -metrics.width / 2, -10 * unit + 8);
+        ctx.fillText(recip, -metrics.width / 2, -10 * this.unit + 8);
 
         ctx.rotate(10 * Math.PI / 180);
       }
@@ -153,9 +159,9 @@ export class GraphicalBoardDirective implements AfterViewInit {
 
       // borders
       ctx.lineWidth = 1;
-      ctx.translate(ctr, ctr);
+      ctx.translate(this.ctr, this.ctr);
       ctx.beginPath();
-      let tenmmiles = 10 * unit;
+      let tenmmiles = 10 * this.unit;
       // outside circle (10 mile)
       ctx.arc(0, 0, tenmmiles, 0, Math.PI * 2, true);
       ctx.stroke();

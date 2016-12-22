@@ -24,36 +24,84 @@ export class ContactListService {
 
     loadAll() {
         this.dataStore.contactList = [
-            {
-                label: 'M1',
-                time: 2200,
-                brg: 67,
-                rng: 10.8
-            },
-            {
-                label: 'M2',
-                time: 2208,
-                brg: 63,
-                rng: 9.4
-            },
-            {
-                label: 'M3',
-                time: 2216,
-                brg: 58,
-                rng: 8.2
-            },
-            {
-                label: 'M4',
-                time: 2224,
-                brg: 52,
-                rng: 7.2
-            },
-            {
-                label: 'M5',
-                time: 2232,
-                brg: 43,
-                rng: 6.2
-            }
+            new Contact(
+                'M1',
+                2200,
+                67,
+                10.8
+            ),
+            new Contact(
+                'M2',
+                2208,
+                63,
+                9.4
+            ),
+            new Contact(
+                'M3',
+                2216,
+                58,
+                8.2
+            ),
+            new Contact(
+                'M4',
+                2224,
+                52,
+                7.2
+            ),
+            new Contact(
+                'M5',
+                2232,
+                43,
+                6.2
+            ),
+            new Contact(
+                '6.2@100T',
+                2232,
+                100,
+                6.2
+            ),
+            new Contact(
+                '6.2@170T',
+                2232,
+                170,
+                6.2
+            ),
+            new Contact(
+                '3.2@180T',
+                2232,
+                180,
+                3.2
+            ),
+            new Contact(
+                '9.2@190T',
+                2232,
+                190,
+                9.2
+            ),
+            new Contact(
+                '5.2@250T',
+                2232,
+                250,
+                5.2
+            ),
+            new Contact(
+                '2@270T',
+                2232,
+                270,
+                2
+            ),
+            new Contact(
+                '8.2@280T',
+                2232,
+                280,
+                8.2
+            ),
+            new Contact(
+                '4@350T',
+                2232,
+                350,
+                4
+            )
         ];
         this._contactList.next(Object.assign({}, this.dataStore).contactList);
     }
