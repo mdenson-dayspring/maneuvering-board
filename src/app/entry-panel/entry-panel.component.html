@@ -1,0 +1,13 @@
+<div>
+    <form class="form-horizontal">
+    <div class="form-group">
+        <label for="speed">Our Course</label>
+        <input type="text" class="form-control" id="speed" #ourSpeed />
+        <input type="text" class="form-control" id="course" #ourCourse />
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" (click)="addScores(ourSpeed.value, ourCourse.value)">Add</button>
+        <button class="btn btn-default" (click)="resetScores()">Reset</button>
+    </div>
+    </form>
+</div>

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { LOG_LOGGER_PROVIDERS } from 'angular2-logger/core';
 
 import { AppComponent } from './app.component';
+import { EntryPanelComponent } from './entry-panel/entry-panel.component';
 import { GraphicalBoardDirective } from './graphical-board.component';
 import { ContactListService } from './services/contact-list.service';
 
@@ -12,7 +13,8 @@ import { ContactListService } from './services/contact-list.service';
   ],
   declarations: [
     AppComponent,
-    GraphicalBoardDirective
+    GraphicalBoardDirective,
+    EntryPanelComponent
   ],
   bootstrap: [AppComponent],
   providers: [

@@ -1,18 +1,6 @@
 <div class="container">
   <div class="row">
     <graphical-board class="col-sm-8"></graphical-board>
-
-    <div class="col-sm-4">
-      <form>
-        <div class="form-group">
-          <label for="scoreInput">Score Input</label>
-          <textarea class="form-control" id="scoreInput" #newitem rows="4"></textarea>
-        </div>
-        <div class="form-group">
-          <button class="btn btn-primary" (click)="addScores(newitem.value)">Add</button>
-          <button class="btn btn-default" (click)="resetScores()">Reset</button>
-        </div>
-      </form>
-    </div>
+    <entry-panel class="col-sm-4"></entry-panel>
   </div>
 </div>
